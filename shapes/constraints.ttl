@@ -1,0 +1,206 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix :     <http://www.semanticweb.org/najma/ontologies/homecredit/> .
+@prefix fibo-app: <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/> .
+
+:ShapesPrefixes a owl:Ontology ;
+    sh:declare [
+        sh:prefix "hc" ;
+        sh:namespace "http://www.semanticweb.org/najma/ontologies/homecredit/"^^xsd:anyURI
+    ] .
+
+# Rujukan OJK 40%. Periode annuity dan income tidak terdokumentasi di dataset; rasio dipakai langsung.
+:InstallmentToIncomeShape a sh:NodeShape ;
+    sh:targetClass fibo-app:LoanApplication ;
+    sh:severity sh:Warning ;
+    sh:sparql [
+        sh:message "AMT_ANNUITY / AMT_INCOME_TOTAL melebihi 40% (rujukan OJK)." ;
+        sh:prefixes :ShapesPrefixes ;
+        sh:select """
+            SELECT $this ?value
+            WHERE {
+                $this hc:hasAnnuityAmount ?annuity ;
+                      hc:SubmittedBy ?applicant .
+                ?applicant hc:hasIncomeAmount ?income .
+                FILTER(?income > 0)
+                BIND(?annuity / ?income AS ?value)
+                FILTER(?value > 0.4)
+            }
+        """ ;
+    ] .
+
+# Angsuran periodik tidak boleh melebihi total pinjaman (setara tenor >= 1).
+:AnnuityNotExceedCreditShape a sh:NodeShape ;
+    sh:targetClass fibo-app:LoanApplication ;
+    sh:sparql [
+        sh:message "AMT_ANNUITY melebihi AMT_CREDIT." ;
+        sh:prefixes :ShapesPrefixes ;
+        sh:select """
+            SELECT $this ?value
+            WHERE {
+                $this hc:hasAnnuityAmount ?value ;
+                      hc:hasCreditAmount ?credit .
+                FILTER(?value > ?credit)
+            }
+        """ ;
+    ] .
+
+# Usia saat mulai bekerja (usia - masa kerja) >= 15 (UU 20/1999, ILO 138). Sentinel 365243 dilewati.
+:MinimumWorkingAgeShape a sh:NodeShape ;
+    sh:targetClass :Applicant ;
+    sh:sparql [
+        sh:message "Usia saat mulai bekerja (usia - masa kerja) kurang dari 15 tahun." ;
+        sh:prefixes :ShapesPrefixes ;
+        sh:select """
+            SELECT $this ?value
+            WHERE {
+                $this hc:hasAgeInDays ?birth ;
+                      hc:hasEmploymentDurationInDays ?emp .
+                FILTER(?emp <= 0)
+                BIND((?emp - ?birth) / 365.25 AS ?value)
+                FILTER(?value < 15)
+            }
+        """ ;
+    ] .
+
+# Usia >= 18 atau pernah menikah (OJK PADK 2/2026, SEOJK 19/2025, UU 1/1974).
+:LegalAgeShape a sh:NodeShape ;
+    sh:targetClass :Applicant ;
+    sh:sparql [
+        sh:message "Usia di bawah 18 tahun dan belum pernah menikah." ;
+        sh:prefixes :ShapesPrefixes ;
+        sh:select """
+            SELECT $this ?value
+            WHERE {
+                $this hc:hasAgeInDays ?birth ;
+                      hc:hasFamilyStatus ?status .
+                BIND(-?birth / 365.25 AS ?value)
+                FILTER(?value < 18 &&
+                       STR(?status) NOT IN ("Married", "Civil marriage", "Separated", "Widow"))
+            }
+        """ ;
+    ] .
+
+# Dokumen identitas dan registrasi tidak mungkin diperbarui sebelum pemohon lahir.
+:IdPublishAfterBirthShape a sh:NodeShape ;
+    sh:targetClass :Applicant ;
+    sh:sparql [
+        sh:message "DAYS_ID_PUBLISH lebih lama dari usia pemohon." ;
+        sh:prefixes :ShapesPrefixes ;
+        sh:select """
+            SELECT $this ?value
+            WHERE {
+                $this hc:hasAgeInDays ?birth ;
+                      hc:hasDaysIDPublish ?value .
+                FILTER(?value < ?birth)
+            }
+        """ ;
+    ] .
+
+:RegistrationAfterBirthShape a sh:NodeShape ;
+    sh:targetClass :Applicant ;
+    sh:sparql [
+        sh:message "DAYS_REGISTRATION lebih lama dari usia pemohon." ;
+        sh:prefixes :ShapesPrefixes ;
+        sh:select """
+            SELECT $this ?value
+            WHERE {
+                $this hc:hasAgeInDays ?birth ;
+                      hc:hasRegistrationDaysBeforeApplication ?value .
+                FILTER(?value < ?birth)
+            }
+        """ ;
+    ] .
+
+:FamilyCompositionShape a sh:NodeShape ;
+    sh:targetClass :Applicant ;
+    sh:sparql [
+        sh:message "hasNumberOfFamilyMembers tidak sama dengan hasNumberOfChildren + jumlah dewasa (Married/Civil marriage = 2, lainnya = 1)." ;
+        sh:prefixes :ShapesPrefixes ;
+        sh:select """
+            SELECT $this ?value
+            WHERE {
+                $this hc:hasNumberOfFamilyMembers ?value ;
+                      hc:hasNumberOfChildren ?children ;
+                      hc:hasFamilyStatus ?status .
+                FILTER(STR(?status) != "Unknown")
+                BIND(IF(STR(?status) IN ("Married", "Civil marriage"), 2, 1) AS ?adults)
+                FILTER(?value != ?children + ?adults)
+            }
+        """ ;
+    ] .
+
+# Umur mobil hanya ada jika pemohon memiliki mobil.
+:CarOwnershipAgeShape a sh:NodeShape ;
+    sh:targetClass :Applicant ;
+    sh:sparql [
+        sh:message "hasCarOwnershipStatus tidak sesuai dengan keberadaan hasCarAge." ;
+        sh:prefixes :ShapesPrefixes ;
+        sh:select """
+            SELECT $this ?value
+            WHERE {
+                $this hc:hasCarOwnershipStatus ?value .
+                OPTIONAL { $this hc:hasCarAge ?age }
+                FILTER((STR(?value) = "N" && BOUND(?age)) || (STR(?value) = "Y" && !BOUND(?age)))
+            }
+        """ ;
+    ] .
+
+# Kesamaan kota/region bersifat transitif: jumlah tiga flag tidak boleh 1.
+:CityTransitivityShape a sh:NodeShape ;
+    sh:targetClass :ResidenceInformation ;
+    sh:sparql [
+        sh:message "Flag perbedaan city tidak konsisten: dua alamat sama kota tetapi alamat ketiga berbeda." ;
+        sh:prefixes :ShapesPrefixes ;
+        sh:select """
+            SELECT $this ?value
+            WHERE {
+                $this hc:hasRegistrationLivingCityDifference ?a ;
+                      hc:hasRegistrationWorkCityDifference ?b ;
+                      hc:hasLivingWorkCityDifference ?c .
+                BIND(?a + ?b + ?c AS ?value)
+                FILTER(?value = 1)
+            }
+        """ ;
+    ] .
+
+:RegionTransitivityShape a sh:NodeShape ;
+    sh:targetClass :ResidenceInformation ;
+    sh:sparql [
+        sh:message "Flag perbedaan region tidak konsisten: dua alamat sama region tetapi alamat ketiga berbeda." ;
+        sh:prefixes :ShapesPrefixes ;
+        sh:select """
+            SELECT $this ?value
+            WHERE {
+                $this hc:hasRegistrationLivingRegionDifference ?a ;
+                      hc:hasRegistrationWorkRegionDifference ?b ;
+                      hc:hasLivingWorkRegionDifference ?c .
+                BIND(?a + ?b + ?c AS ?value)
+                FILTER(?value = 1)
+            }
+        """ ;
+    ] .
+
+# Satu city pasti satu region; beda city bebas.
+:CityRegionHierarchyShape a sh:NodeShape ;
+    sh:targetClass :ResidenceInformation ;
+    sh:sparql [
+        sh:message "Dua alamat berada di kota yang sama tetapi berbeda region." ;
+        sh:prefixes :ShapesPrefixes ;
+        sh:select """
+            SELECT $this ?value
+            WHERE {
+                $this hc:hasRegistrationLivingCityDifference ?cRL ;
+                      hc:hasRegistrationWorkCityDifference ?cRW ;
+                      hc:hasLivingWorkCityDifference ?cLW ;
+                      hc:hasRegistrationLivingRegionDifference ?rRL ;
+                      hc:hasRegistrationWorkRegionDifference ?rRW ;
+                      hc:hasLivingWorkRegionDifference ?rLW .
+                BIND(IF(?cRL = 0 && ?rRL = 1, 1, 0)
+                   + IF(?cRW = 0 && ?rRW = 1, 1, 0)
+                   + IF(?cLW = 0 && ?rLW = 1, 1, 0) AS ?value)
+                FILTER(?value > 0)
+            }
+        """ ;
+    ] .

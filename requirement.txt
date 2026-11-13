@@ -1,0 +1,6 @@
+rdflib
+pyshacl
+pandas
+scipy
+numpy
+SDV

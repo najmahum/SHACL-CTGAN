@@ -1,0 +1,1513 @@
+@prefix : <http://www.semanticweb.org/najma/ontologies/homecredit/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@base <http://www.semanticweb.org/najma/ontologies/homecredit/> .
+
+<http://www.semanticweb.org/najma/ontologies/homecredit/> rdf:type owl:Ontology .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/terms/source
+dcterms:source rdf:type owl:AnnotationProperty .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/rangeSource
+:rangeSource rdf:type owl:AnnotationProperty ;
+             rdfs:comment "Source of the range, allowed values or threshold given in valueRange."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/valueRange
+:valueRange rdf:type owl:AnnotationProperty ;
+            rdfs:comment "Valid range, allowed values or regulatory/literature threshold used to validate data for the annotated property."@en .
+
+
+###  http://www.w3.org/2004/02/skos/core#definition
+skos:definition rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/SubmittedBy
+:SubmittedBy rdf:type owl:ObjectProperty ;
+             rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+             rdfs:range :Applicant .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasContactInformation
+:hasContactInformation rdf:type owl:ObjectProperty ;
+                       rdfs:domain :Applicant ;
+                       rdfs:range :ContactInformation .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasCreditBureauHistory
+:hasCreditBureauHistory rdf:type owl:ObjectProperty ;
+                        rdfs:domain :Applicant ;
+                        rdfs:range :CreditBureauHistory .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasExternalAssessment
+:hasExternalAssessment rdf:type owl:ObjectProperty ;
+                       rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                       rdfs:range :ExternalAssessment .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasPropertyInfo
+:hasPropertyInfo rdf:type owl:ObjectProperty ;
+                 rdfs:domain :Applicant ;
+                 rdfs:range :PropertyInformation .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasResidenceInformation
+:hasResidenceInformation rdf:type owl:ObjectProperty ;
+                         rdfs:domain :Applicant ;
+                         rdfs:range :ResidenceInformation .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasSocialSurroundings
+:hasSocialSurroundings rdf:type owl:ObjectProperty ;
+                       rdfs:domain :Applicant ;
+                       rdfs:range :SocialSurroundings .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasAgeInDays
+:hasAgeInDays rdf:type owl:DatatypeProperty ;
+              rdfs:domain :Applicant ;
+              rdfs:range xsd:integer ;
+              dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column DAYS_BIRTH. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+              :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+              :valueRange "Observed range: -25229 to -7489. Note: Negative days before application; equals an age of about 20.5 to 69.1 years."@en ;
+              skos:definition "Applicant's age at the time of application, stored as a negative number of days counted back from the application date."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasAgeYears
+:hasAgeYears rdf:type owl:DatatypeProperty ;
+             rdfs:domain :Applicant ;
+             rdfs:range xsd:decimal ;
+             dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column DAYS_BIRTH. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ,
+                            "Kitab Undang-Undang Hukum Perdata (KUHPerdata / Burgerlijk Wetboek), Pasal 330 (belum dewasa: belum genap 21 tahun dan tidak kawin sebelumnya)."@en ;
+             :rangeSource "Kitab Undang-Undang Hukum Perdata (KUHPerdata / Burgerlijk Wetboek), Pasal 330 (belum dewasa: belum genap 21 tahun dan tidak kawin sebelumnya)."@en ,
+                          "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ,
+                          "Peraturan Anggota Dewan Komisioner OJK No. 2 Tahun 2026 tentang Penyelenggaraan Beli Sekarang Bayar Nanti (BNPL) bagi Perusahaan Pembiayaan dan Perusahaan Pembiayaan Syariah: calon debitur minimal 18 tahun atau telah menikah, penghasilan bruto minimal Rp3.000.000 per bulan; berlaku paling lambat 1 Juli 2026."@en ,
+                          "Surat Edaran OJK No. 19/SEOJK.06/2025 tentang Penyelenggaraan LPBBTI (turunan POJK No. 40 Tahun 2024): penerima dana minimal 18 tahun atau telah menikah; rasio utang terhadap penghasilan paling tinggi 40% pada 2025 dan 30% mulai 2026 (as reported by Bisnis.com, https://finansial.bisnis.com/read/20260112/563/1943510/tahun-ini-batas-maksimal-kredit-pinjol-diperketat-jadi-30-dari-gaji; verify against the official text)."@en ;
+             :valueRange "Observed range: 20.5 to 69.07. Regulatory/literature threshold: Minimum age to contract: 18 years or married (OJK PADK 2/2026; SEOJK 19/2025); 21 years or married (KUHPerdata Art. 330). Note: Derived from the observed DAYS_BIRTH range. The real minimum (about 20.5 years) is below 21, so a 21-year rule would mark some real applicants as not of legal age unless married; an 18-year rule marks none."@en ;
+             rdfs:comment "Calculated as (-hasAgeInDays / 365.25). KUHPerdata Article 330 provides the age threshold of 21 years or the exception for a person who is married."@en ;
+             skos:definition "Applicant's age in years, derived from hasAgeInDays by taking the absolute number of days and dividing by 365.25."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasAnnuityAmount
+:hasAnnuityAmount rdf:type owl:DatatypeProperty ;
+                  rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column AMT_ANNUITY. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                               "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: ~1.6k to ~258k. Note: About 12 real rows are empty."@en ;
+                  skos:definition "Loan annuity: the periodic installment amount of the loan."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasApartmentsAvg
+:hasApartmentsAvg rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column APARTMENTS_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                  skos:definition "Normalized (0 to 1) average of the apartment size in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasApartmentsMedi
+:hasApartmentsMedi rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :PropertyInformation ;
+                   rdfs:range xsd:float ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column APARTMENTS_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                   skos:definition "Normalized (0 to 1) median of the apartment size in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasApartmentsMode
+:hasApartmentsMode rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :PropertyInformation ;
+                   rdfs:range xsd:float ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column APARTMENTS_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                   skos:definition "Normalized (0 to 1) mode (most frequent value) of the apartment size in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasApplicantGender
+:hasApplicantGender rdf:type owl:DatatypeProperty ;
+                    rdfs:domain :Applicant ;
+                    rdfs:range xsd:string ;
+                    dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column CODE_GENDER. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                    :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                    :valueRange "Allowed values: F, M, XNA (3 classes)."@en ;
+                    skos:definition "Gender of the applicant."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasApplicationID
+:hasApplicationID rdf:type owl:DatatypeProperty ;
+                  rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                  rdfs:range xsd:integer ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column SK_ID_CURR. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: ~100k to ~456k. Note: Integer identifier, unique per application."@en ;
+                  skos:definition "Identifier of the loan application in the Home Credit sample."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasApplicationStartDay
+:hasApplicationStartDay rdf:type owl:DatatypeProperty ;
+                        rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                        rdfs:range xsd:string ;
+                        dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column WEEKDAY_APPR_PROCESS_START. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                        :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                        :valueRange "Allowed values: MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY."@en ;
+                        skos:definition "Day of the week on which the applicant applied for the loan."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasApplicationStartHour
+:hasApplicationStartHour rdf:type owl:DatatypeProperty ;
+                         rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                         rdfs:range xsd:integer ;
+                         dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column HOUR_APPR_PROCESS_START. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                         :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                         :valueRange "Observed range: 0 to 23. Note: Integer hour of day."@en ;
+                         skos:definition "Approximate hour of the day at which the applicant applied for the loan."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasBasementAreaAvg
+:hasBasementAreaAvg rdf:type owl:DatatypeProperty ;
+                    rdfs:domain :PropertyInformation ;
+                    rdfs:range xsd:float ;
+                    dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column BASEMENTAREA_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                    :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                    :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                    skos:definition "Normalized (0 to 1) average of the basement area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasBasementAreaMedi
+:hasBasementAreaMedi rdf:type owl:DatatypeProperty ;
+                     rdfs:domain :PropertyInformation ;
+                     rdfs:range xsd:float ;
+                     dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column BASEMENTAREA_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                     :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                     :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                     skos:definition "Normalized (0 to 1) median of the basement area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasBasementAreaMode
+:hasBasementAreaMode rdf:type owl:DatatypeProperty ;
+                     rdfs:domain :PropertyInformation ;
+                     rdfs:range xsd:float ;
+                     dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column BASEMENTAREA_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                     :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                     :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                     skos:definition "Normalized (0 to 1) mode (most frequent value) of the basement area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasBureauInquiryCountDay
+:hasBureauInquiryCountDay rdf:type owl:DatatypeProperty ;
+                          rdfs:domain :CreditBureauHistory ;
+                          rdfs:range xsd:float ;
+                          dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column AMT_REQ_CREDIT_BUREAU_DAY. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                          :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                       "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                          :valueRange "Observed range: 0 to 9. Note: Non-negative integer; about 41,519 real rows (13.5%) are empty."@en ;
+                          skos:definition "Number of enquiries made to the credit bureau about the applicant during one day before the application, excluding the last hour."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasBureauInquiryCountHour
+:hasBureauInquiryCountHour rdf:type owl:DatatypeProperty ;
+                           rdfs:domain :CreditBureauHistory ;
+                           rdfs:range xsd:float ;
+                           dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column AMT_REQ_CREDIT_BUREAU_HOUR. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                           :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                        "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                           :valueRange "Observed range: 0 to 4. Note: Non-negative integer; about 41,519 real rows (13.5%) are empty."@en ;
+                           skos:definition "Number of enquiries made to the credit bureau about the applicant during one hour before the application."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasBureauInquiryCountMonth
+:hasBureauInquiryCountMonth rdf:type owl:DatatypeProperty ;
+                            rdfs:domain :CreditBureauHistory ;
+                            rdfs:range xsd:float ;
+                            dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column AMT_REQ_CREDIT_BUREAU_MON. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                            :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                         "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                            :valueRange "Observed range: 0 to 27. Note: Non-negative integer; about 41,519 real rows (13.5%) are empty."@en ;
+                            skos:definition "Number of enquiries made to the credit bureau about the applicant during one month before the application, excluding the last week."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasBureauInquiryCountQuarter
+:hasBureauInquiryCountQuarter rdf:type owl:DatatypeProperty ;
+                              rdfs:domain :CreditBureauHistory ;
+                              rdfs:range xsd:float ;
+                              dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column AMT_REQ_CREDIT_BUREAU_QRT. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                              :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                           "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                              :valueRange "Observed range: 0 to 261. Note: Non-negative integer; about 41,519 real rows (13.5%) are empty. Maximum 261 is a known outlier."@en ;
+                              skos:definition "Number of enquiries made to the credit bureau about the applicant during three months before the application, excluding the last month."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasBureauInquiryCountWeek
+:hasBureauInquiryCountWeek rdf:type owl:DatatypeProperty ;
+                           rdfs:domain :CreditBureauHistory ;
+                           rdfs:range xsd:float ;
+                           dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column AMT_REQ_CREDIT_BUREAU_WEEK. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                           :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                        "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                           :valueRange "Observed range: 0 to 8. Note: Non-negative integer; about 41,519 real rows (13.5%) are empty."@en ;
+                           skos:definition "Number of enquiries made to the credit bureau about the applicant during one week before the application, excluding the last day."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasBureauInquiryCountYear
+:hasBureauInquiryCountYear rdf:type owl:DatatypeProperty ;
+                           rdfs:domain :CreditBureauHistory ;
+                           rdfs:range xsd:float ;
+                           dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column AMT_REQ_CREDIT_BUREAU_YEAR. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                           :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                        "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                           :valueRange "Observed range: 0 to 25. Note: Non-negative integer; about 41,519 real rows (13.5%) are empty."@en ;
+                           skos:definition "Number of enquiries made to the credit bureau about the applicant during one year before the application, excluding the last three months."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasCarAge
+:hasCarAge rdf:type owl:DatatypeProperty ;
+           rdfs:domain :Applicant ;
+           rdfs:range xsd:float ;
+           dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column OWN_CAR_AGE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+           :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ,
+                        "Randlow, 'Kaggle: Credit risk (Exploratory Data Analysis)', describe() of DAYS_EMPLOYED: min -17912, max 365243. https://randlow.github.io/posts/machine-learning/kaggle-home-loan-credit-risk-eda"@en ;
+           :valueRange "Observed range: 0 to 91. Note: Only filled when the applicant owns a car; about 66% of real rows are empty."@en ;
+           skos:definition "Age of the applicant's car; meaningful only when the applicant owns a car."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasCarOwnershipStatus
+:hasCarOwnershipStatus rdf:type owl:DatatypeProperty ;
+                       rdfs:domain :Applicant ;
+                       rdfs:range xsd:string ;
+                       dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_OWN_CAR. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                       :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                       :valueRange "Allowed values: Y, N."@en ;
+                       skos:definition "Flag showing whether the applicant owns a car (Y/N)."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasCommonAreaAvg
+:hasCommonAreaAvg rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column COMMONAREA_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                  skos:definition "Normalized (0 to 1) average of the common area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasCommonAreaMedi
+:hasCommonAreaMedi rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :PropertyInformation ;
+                   rdfs:range xsd:float ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column COMMONAREA_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                   skos:definition "Normalized (0 to 1) median of the common area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasCommonAreaMode
+:hasCommonAreaMode rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :PropertyInformation ;
+                   rdfs:range xsd:float ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column COMMONAREA_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                   skos:definition "Normalized (0 to 1) mode (most frequent value) of the common area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasCompanionship
+:hasCompanionship rdf:type owl:DatatypeProperty ;
+                  rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                  rdfs:range xsd:string ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column NAME_TYPE_SUITE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                  :valueRange "Allowed values: Unaccompanied; Family; Spouse, partner; Children; Other_A; Other_B; Group of people (7 classes)."@en ;
+                  skos:definition "Who accompanied the applicant when applying for the loan."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasContactFlagEmail
+:hasContactFlagEmail rdf:type owl:DatatypeProperty ;
+                     rdfs:domain :ContactInformation ;
+                     rdfs:range xsd:boolean ;
+                     dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_EMAIL. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                     :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                     :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                     skos:definition "Whether the applicant provided an email address."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasContactFlagEmployerPhone
+:hasContactFlagEmployerPhone rdf:type owl:DatatypeProperty ;
+                             rdfs:domain :ContactInformation ;
+                             rdfs:range xsd:boolean ;
+                             dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_EMP_PHONE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                             :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                             :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                             skos:definition "Whether the applicant provided an employer (work) phone number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasContactFlagHomePhone
+:hasContactFlagHomePhone rdf:type owl:DatatypeProperty ;
+                         rdfs:domain :ContactInformation ;
+                         rdfs:range xsd:boolean ;
+                         dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_PHONE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                         :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                         :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                         skos:definition "Whether the applicant provided a home phone number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasContactFlagMobile
+:hasContactFlagMobile rdf:type owl:DatatypeProperty ;
+                      rdfs:domain :ContactInformation ;
+                      rdfs:range xsd:boolean ;
+                      dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_MOBIL. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                      :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                      :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                      skos:definition "Whether the applicant provided a mobile phone number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasContactFlagMobileReachable
+:hasContactFlagMobileReachable rdf:type owl:DatatypeProperty ;
+                               rdfs:domain :ContactInformation ;
+                               rdfs:range xsd:boolean ;
+                               dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_CONT_MOBILE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                               :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                               :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                               skos:definition "Whether the applicant's mobile phone was reachable."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasContactFlagPhone
+:hasContactFlagPhone rdf:type owl:DatatypeProperty ;
+                     rdfs:domain :ContactInformation ;
+                     rdfs:range xsd:boolean ;
+                     dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_WORK_PHONE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                     :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                     :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                     skos:definition "Whether the applicant provided an additional (work) phone number; the dictionary labels FLAG_WORK_PHONE as 'home phone', so this mapping is an interpretation and should be confirmed."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasCreditAmount
+:hasCreditAmount rdf:type owl:DatatypeProperty ;
+                 rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                 rdfs:range xsd:float ;
+                 dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column AMT_CREDIT. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                 :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                 :valueRange "Observed range: 45000 to 4050000."@en ;
+                 skos:definition "Credit amount of the loan."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasCreditRiskStatus
+:hasCreditRiskStatus rdf:type owl:DatatypeProperty ;
+                     rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                     rdfs:range xsd:integer ;
+                     dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column TARGET. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                     :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                     :valueRange "Allowed values: 0, 1."@en ;
+                     rdfs:comment "The applicant credit risk status. A value of 1 indicates payment difficulties, while 0 indicates otherwise."@en ;
+                     skos:definition "Repayment outcome label: 1 means the client had payment difficulties (a late payment of more than a defined number of days on at least one of the first installments in the sample); 0 means all other cases."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasAgeAtIdPublish
+:hasAgeAtIdPublish rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Applicant ;
+    rdfs:range xsd:decimal ;
+    :valueRange "Must be >= 0: the identity document cannot be changed before the applicant was born."@en ;
+    rdfs:comment "Calculated as (hasDaysIDPublish - hasAgeInDays) / 365.25."@en ;
+    skos:definition "Applicant's age in years when the identity document was last changed."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasAgeAtRegistration
+:hasAgeAtRegistration rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Applicant ;
+    rdfs:range xsd:decimal ;
+    :valueRange "Must be >= 0: the registration cannot be changed before the applicant was born."@en ;
+    rdfs:comment "Calculated as (hasRegistrationDaysBeforeApplication - hasAgeInDays) / 365.25."@en ;
+    skos:definition "Applicant's age in years when the registration was last changed."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDaysIDPublish
+:hasDaysIDPublish rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :Applicant ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column DAYS_ID_PUBLISH. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: -7197 to 0. Note: Negative days; at most about 19.7 years before application."@en ;
+                  rdfs:comment "The number of days since the applicant last updated their identity document before the loan application date."@en ;
+                  skos:definition "How many days before the application the applicant last changed the identity document used to apply for the loan (stored as a negative number)."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag10
+:hasDocumentFlag10 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                   rdfs:range xsd:boolean ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_10. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                   skos:definition "Whether the applicant provided document 10. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag11
+:hasDocumentFlag11 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                   rdfs:range xsd:boolean ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_11. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                   skos:definition "Whether the applicant provided document 11. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag12
+:hasDocumentFlag12 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                   rdfs:range xsd:boolean ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_12. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                   skos:definition "Whether the applicant provided document 12. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag13
+:hasDocumentFlag13 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                   rdfs:range xsd:boolean ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_13. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                   skos:definition "Whether the applicant provided document 13. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag14
+:hasDocumentFlag14 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                   rdfs:range xsd:boolean ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_14. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                   skos:definition "Whether the applicant provided document 14. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag15
+:hasDocumentFlag15 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                   rdfs:range xsd:boolean ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_15. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                   skos:definition "Whether the applicant provided document 15. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag16
+:hasDocumentFlag16 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                   rdfs:range xsd:boolean ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_16. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                   skos:definition "Whether the applicant provided document 16. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag17
+:hasDocumentFlag17 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                   rdfs:range xsd:boolean ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_17. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                   skos:definition "Whether the applicant provided document 17. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag18
+:hasDocumentFlag18 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                   rdfs:range xsd:boolean ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_18. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                   skos:definition "Whether the applicant provided document 18. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag19
+:hasDocumentFlag19 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                   rdfs:range xsd:boolean ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_19. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                   skos:definition "Whether the applicant provided document 19. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag2
+:hasDocumentFlag2 rdf:type owl:DatatypeProperty ;
+                  rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                  rdfs:range xsd:boolean ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_2. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                  skos:definition "Whether the applicant provided document 2. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag20
+:hasDocumentFlag20 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                   rdfs:range xsd:boolean ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_20. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                   skos:definition "Whether the applicant provided document 20. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag21
+:hasDocumentFlag21 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                   rdfs:range xsd:boolean ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_21. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                   skos:definition "Whether the applicant provided document 21. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag3
+:hasDocumentFlag3 rdf:type owl:DatatypeProperty ;
+                  rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                  rdfs:range xsd:boolean ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_3. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                  skos:definition "Whether the applicant provided document 3. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag4
+:hasDocumentFlag4 rdf:type owl:DatatypeProperty ;
+                  rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                  rdfs:range xsd:boolean ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_4. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                  skos:definition "Whether the applicant provided document 4. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag5
+:hasDocumentFlag5 rdf:type owl:DatatypeProperty ;
+                  rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                  rdfs:range xsd:boolean ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_5. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                  skos:definition "Whether the applicant provided document 5. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag6
+:hasDocumentFlag6 rdf:type owl:DatatypeProperty ;
+                  rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                  rdfs:range xsd:boolean ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_6. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                  skos:definition "Whether the applicant provided document 6. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag7
+:hasDocumentFlag7 rdf:type owl:DatatypeProperty ;
+                  rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                  rdfs:range xsd:boolean ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_7. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                  skos:definition "Whether the applicant provided document 7. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag8
+:hasDocumentFlag8 rdf:type owl:DatatypeProperty ;
+                  rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                  rdfs:range xsd:boolean ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_8. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                  skos:definition "Whether the applicant provided document 8. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasDocumentFlag9
+:hasDocumentFlag9 rdf:type owl:DatatypeProperty ;
+                  rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                  rdfs:range xsd:boolean ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_DOCUMENT_9. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1."@en ;
+                  skos:definition "Whether the applicant provided document 9. The official dictionary identifies the documents only by number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasEducationLevel
+:hasEducationLevel rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :Applicant ;
+                   rdfs:range xsd:string ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column NAME_EDUCATION_TYPE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                   :valueRange "Allowed values: Secondary / secondary special; Higher education; Incomplete higher; Lower secondary; Academic degree (5 classes)."@en ;
+                   skos:definition "Highest level of education the applicant achieved."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasElevatorsAvg
+:hasElevatorsAvg rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :PropertyInformation ;
+                 rdfs:range xsd:float ;
+                 dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column ELEVATORS_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                 :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                 :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                 skos:definition "Normalized (0 to 1) average of the number of elevators in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasElevatorsMedi
+:hasElevatorsMedi rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column ELEVATORS_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                  skos:definition "Normalized (0 to 1) median of the number of elevators in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasElevatorsMode
+:hasElevatorsMode rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column ELEVATORS_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                  skos:definition "Normalized (0 to 1) mode (most frequent value) of the number of elevators in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasEmergencyStateMode
+:hasEmergencyStateMode rdf:type owl:DatatypeProperty ;
+                       rdfs:domain :PropertyInformation ;
+                       rdfs:range xsd:string ;
+                       dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column EMERGENCYSTATE_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                       :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                       :valueRange "Allowed values: Yes, No."@en ;
+                       rdfs:comment "Indicates whether the building where the applicant lives is in an emergency condition."@en ;
+                       skos:definition "Whether the building where the applicant lives is in an emergency state (Yes/No)."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasEmploymentDurationInDays
+:hasEmploymentDurationInDays rdf:type owl:DatatypeProperty ;
+                             rdfs:domain :Applicant ;
+                             rdfs:range xsd:integer ;
+                             dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column DAYS_EMPLOYED. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                             :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ,
+                                          "Randlow, 'Kaggle: Credit risk (Exploratory Data Analysis)', describe() of DAYS_EMPLOYED: min -17912, max 365243. https://randlow.github.io/posts/machine-learning/kaggle-home-loan-credit-risk-eda"@en ;
+                             :valueRange "Observed range: -17912 to 0. Allowed values: or the placeholder 365243 (maximum observed value). Note: Real-data maximum is 365243, a placeholder, not a duration."@en ;
+                             skos:definition "How many days before the application the applicant started their current employment, stored as a negative number. The positive value 365243 occurs in application_train.csv as an anomalous placeholder that the official dictionary does not explain."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasEmploymentYears
+:hasEmploymentYears rdf:type owl:DatatypeProperty ;
+                    rdfs:domain :Applicant ;
+                    rdfs:range xsd:decimal ;
+                    dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column DAYS_EMPLOYED. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                    :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ,
+                                 "Randlow, 'Kaggle: Credit risk (Exploratory Data Analysis)', describe() of DAYS_EMPLOYED: min -17912, max 365243. https://randlow.github.io/posts/machine-learning/kaggle-home-loan-credit-risk-eda"@en ;
+                    :valueRange "Observed range: 0 to 49.04. Note: From -17912 days; placeholder 365243 excluded."@en ;
+                    rdfs:comment "Calculated from (-hasEmploymentDurationInDays / 365.25). The sentinel value 365243 is excluded and represented separately by hasUnemployed. This is a dataset-based transformation."@en ;
+                    skos:definition "Length of the applicant's current employment in years, derived from hasEmploymentDurationInDays divided by 365.25 (placeholder value excluded)."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasEntrancesAvg
+:hasEntrancesAvg rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :PropertyInformation ;
+                 rdfs:range xsd:float ;
+                 dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column ENTRANCES_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                 :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                 :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                 skos:definition "Normalized (0 to 1) average of the number of entrances in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasEntrancesMedi
+:hasEntrancesMedi rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column ENTRANCES_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                  skos:definition "Normalized (0 to 1) median of the number of entrances in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasEntrancesMode
+:hasEntrancesMode rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column ENTRANCES_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                  skos:definition "Normalized (0 to 1) mode (most frequent value) of the number of entrances in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasEstimatedTenorMonths
+:hasEstimatedTenorMonths rdf:type owl:DatatypeProperty ;
+                         rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                         rdfs:range xsd:decimal ;
+                         dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, columns AMT_CREDIT, AMT_ANNUITY. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ,
+                                        "Peraturan Otoritas Jasa Keuangan No. 35/POJK.05/2018 tentang Penyelenggaraan Usaha Perusahaan Pembiayaan, Pasal 34 (perjanjian pembiayaan; jangka waktu sebagai informasi kontraktual). https://www.ojk.go.id/id/regulasi/Documents/Pages/Penyelenggaraan-Usaha-Perusahaan-Pembiayaan/pojk%2035-2018.pdf"@en ;
+                         :rangeSource "Peraturan Otoritas Jasa Keuangan No. 35/POJK.05/2018 tentang Penyelenggaraan Usaha Perusahaan Pembiayaan, Pasal 34 (perjanjian pembiayaan; jangka waktu sebagai informasi kontraktual). https://www.ojk.go.id/id/regulasi/Documents/Pages/Penyelenggaraan-Usaha-Perusahaan-Pembiayaan/pojk%2035-2018.pdf"@en ;
+                         :valueRange "Observed range: 0 to no fixed maximum. Regulatory/literature threshold: Tenor is a contractual term (POJK 35/2018 Art. 34); no regulatory range for this approximation. Note: Cash loans only; credit / annuity without interest."@en ;
+                         rdfs:comment "Estimated as hasCreditAmount / hasAnnuityAmount, without accounting for interest. This is an approximate tenor derived from dataset values. POJK 35/2018 Article 34 treats tenor as contractual information; it does not define this calculation. Only for Loan Type Cash Loans."@en ;
+                         skos:definition "Approximate loan term in months, derived as credit amount divided by annuity without interest. A contractual tenor is stated in the financing agreement (POJK 35/2018 Art. 34)."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasExternalScore1
+:hasExternalScore1 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :ExternalAssessment ;
+                   rdfs:range xsd:float ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column EXT_SOURCE_1. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: ~0.01 to ~0.96. Note: About 56.4% of real rows are empty."@en ;
+                   skos:definition "Normalized score (0 to 1) from external data source 1."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasExternalScore2
+:hasExternalScore2 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :ExternalAssessment ;
+                   rdfs:range xsd:float ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column EXT_SOURCE_2. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: ~0 to ~0.86. Note: About 0.2% of real rows are empty."@en ;
+                   skos:definition "Normalized score (0 to 1) from external data source 2."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasExternalScore3
+:hasExternalScore3 rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :ExternalAssessment ;
+                   rdfs:range xsd:float ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column EXT_SOURCE_3. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: ~0 to ~0.90. Note: About 19.8% of real rows are empty."@en ;
+                   skos:definition "Normalized score (0 to 1) from external data source 3."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasFamilyStatus
+:hasFamilyStatus rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :Applicant ;
+                 rdfs:range xsd:string ;
+                 dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column NAME_FAMILY_STATUS. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                 :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                 :valueRange "Allowed values: Married; Single / not married; Civil marriage; Separated; Widow; Unknown (6 classes)."@en ;
+                 skos:definition "Family (marital) status of the applicant."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasFloorsMaxAvg
+:hasFloorsMaxAvg rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :PropertyInformation ;
+                 rdfs:range xsd:float ;
+                 dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLOORSMAX_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                 :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                 :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                 skos:definition "Normalized (0 to 1) average of the maximum number of floors in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasFloorsMaxMedi
+:hasFloorsMaxMedi rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLOORSMAX_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                  skos:definition "Normalized (0 to 1) median of the maximum number of floors in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasFloorsMaxMode
+:hasFloorsMaxMode rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLOORSMAX_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                  skos:definition "Normalized (0 to 1) mode (most frequent value) of the maximum number of floors in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasFloorsMinAvg
+:hasFloorsMinAvg rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :PropertyInformation ;
+                 rdfs:range xsd:float ;
+                 dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLOORSMIN_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                 :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                 :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                 skos:definition "Normalized (0 to 1) average of the minimum number of floors in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasFloorsMinMedi
+:hasFloorsMinMedi rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLOORSMIN_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                  skos:definition "Normalized (0 to 1) median of the minimum number of floors in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasFloorsMinMode
+:hasFloorsMinMode rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLOORSMIN_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                  skos:definition "Normalized (0 to 1) mode (most frequent value) of the minimum number of floors in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasFondkapremontMode
+:hasFondkapremontMode rdf:type owl:DatatypeProperty ;
+                      rdfs:domain :PropertyInformation ;
+                      rdfs:range xsd:string ;
+                      dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FONDKAPREMONT_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                      :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                      :valueRange "Allowed values: reg oper account; reg oper spec account; org spec account; not specified (4 classes)."@en ;
+                      rdfs:comment "The type of management for the building maintenance fund where the applicant lives."@en ;
+                      skos:definition "Type of capital-repair (maintenance) fund arrangement for the building where the applicant lives; the dataset keeps the Russian label 'Fondkapremont'."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasNumberOfAdults
+:hasNumberOfAdults rdf:type owl:DatatypeProperty ;
+    rdfs:domain :Applicant ;
+    rdfs:range xsd:integer ;
+    :valueRange "Allowed values: 1, 2. 2 if hasFamilyStatus is Married or Civil marriage, otherwise 1."@en ;
+    rdfs:comment "hasNumberOfFamilyMembers is expected to equal hasNumberOfChildren + hasNumberOfAdults."@en ;
+    skos:definition "Number of adults in the applicant's household, derived from family status."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasCityMismatchCount
+:hasCityMismatchCount rdf:type owl:DatatypeProperty ;
+    rdfs:domain :ResidenceInformation ;
+    rdfs:range xsd:integer ;
+    :valueRange "Allowed values: 0, 2, 3. The value 1 is impossible because city equality is transitive among registration, living and work addresses."@en ;
+    skos:definition "Sum of hasRegistrationLivingCityDifference, hasRegistrationWorkCityDifference and hasLivingWorkCityDifference."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasRegionMismatchCount
+:hasRegionMismatchCount rdf:type owl:DatatypeProperty ;
+    rdfs:domain :ResidenceInformation ;
+    rdfs:range xsd:integer ;
+    :valueRange "Allowed values: 0, 2, 3. Same transitivity rule as city; the same city implies the same region."@en ;
+    skos:definition "Sum of the three region difference flags."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasGoodsPrice
+:hasGoodsPrice rdf:type owl:DatatypeProperty ;
+               rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+               rdfs:range xsd:float ;
+               dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column AMT_GOODS_PRICE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+               :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                            "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+               :valueRange "Observed range: 40500 to 4050000. Note: About 278 real rows are empty."@en ;
+               skos:definition "For consumer loans, the price of the goods for which the loan is given."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasHouseTypeMode
+:hasHouseTypeMode rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:string ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column HOUSETYPE_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                  :valueRange "Allowed values: block of flats; specific housing; terraced house (3 classes)."@en ;
+                  skos:definition "Type of house or building where the applicant lives (for example block of flats, terraced house)."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasHousingType
+:hasHousingType rdf:type owl:DatatypeProperty ;
+                rdfs:domain :Applicant ;
+                rdfs:range xsd:string ;
+                dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column NAME_HOUSING_TYPE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                :valueRange "Allowed values: House / apartment; With parents; Municipal apartment; Rented apartment; Office apartment; Co-op apartment (6 classes)."@en ;
+                skos:definition "The applicant's housing situation (for example renting, living with parents, own house or apartment)."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasIncomeAmount
+:hasIncomeAmount rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :Applicant ;
+                 rdfs:range xsd:float ;
+                 dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column AMT_INCOME_TOTAL. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                 :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                              "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                 :valueRange "Observed range: ~25.7k to 117000000. Note: Maximum of 117,000,000 is a known outlier; the period (monthly/annual) is not stated in the dictionary."@en ;
+                 skos:definition "Income of the applicant."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasIncomeSourceType
+:hasIncomeSourceType rdf:type owl:DatatypeProperty ;
+                     rdfs:domain :Applicant ;
+                     rdfs:range xsd:string ;
+                     dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column NAME_INCOME_TYPE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                     :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                     :valueRange "Allowed values: Working; Commercial associate; Pensioner; State servant; Unemployed; Student; Businessman; Maternity leave (8 classes)."@en ;
+                     skos:definition "The applicant's income category (for example working, commercial associate, pensioner, state servant)."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasInstallmentToIncomeRatio
+:hasInstallmentToIncomeRatio rdf:type owl:DatatypeProperty ;
+                             rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+                             rdfs:range xsd:decimal ;
+                             dcterms:source "Bank for International Settlements, CGFS Papers No. 69, 'Macroprudential policies to mitigate housing market risks' (borrower-income-based limits: DSTI, DTI). https://www.bis.org/publ/cgfs69.pdf"@en ,
+                                            "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, columns AMT_ANNUITY, AMT_INCOME_TOTAL. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ,
+                                            "PADK OJK No. 2 Tahun 2026 (BNPL): perbandingan pembayaran pokok dan manfaat ekonomi terhadap penghasilan paling tinggi 40% pada 2027-2028 dan 30% sejak 2029 (as reported by Fortune Indonesia, https://www.fortuneidn.com/finance/batas-usia-penghasilan-debitur-paylater-dibatasi-ojk-demi-jaga-kua-00-5mjpg-ld1v0c; verify against the official text)."@en ,
+                                            "Sher, G. (2023). Borrower-Based Macroprudential Instruments in Germany. IMF Selected Issues Paper SIP/2023/060 (definitions of DSTI, DTI and LTI). https://www.imf.org/-/media/files/publications/selected-issues-papers/2023/english/sipea2023060.pdf"@en ,
+                                            "Surat Edaran OJK No. 19/SEOJK.06/2025 tentang Penyelenggaraan LPBBTI (turunan POJK No. 40 Tahun 2024): penerima dana minimal 18 tahun atau telah menikah; rasio utang terhadap penghasilan paling tinggi 40% pada 2025 dan 30% mulai 2026 (as reported by Bisnis.com, https://finansial.bisnis.com/read/20260112/563/1943510/tahun-ini-batas-maksimal-kredit-pinjol-diperketat-jadi-30-dari-gaji; verify against the official text)."@en ;
+                             :rangeSource "Bank for International Settlements, CGFS Papers No. 69, 'Macroprudential policies to mitigate housing market risks' (borrower-income-based limits: DSTI, DTI). https://www.bis.org/publ/cgfs69.pdf"@en ,
+                                          "Bisnis.com (2025), 'Perhatian! SLIK Tak Jadi Satu-satunya Faktor Penilaian KPR Bank': installment-to-income usually capped at 30-40%. https://finansial.bisnis.com/read/20250626/55/1888474/perhatian-slik-tak-jadi-satu-satunya-faktor-penilaian-kpr-bank"@en ,
+                                          "PADK OJK No. 2 Tahun 2026 (BNPL): perbandingan pembayaran pokok dan manfaat ekonomi terhadap penghasilan paling tinggi 40% pada 2027-2028 dan 30% sejak 2029 (as reported by Fortune Indonesia, https://www.fortuneidn.com/finance/batas-usia-penghasilan-debitur-paylater-dibatasi-ojk-demi-jaga-kua-00-5mjpg-ld1v0c; verify against the official text)."@en ,
+                                          "Sher, G. (2023). Borrower-Based Macroprudential Instruments in Germany. IMF Selected Issues Paper SIP/2023/060 (definitions of DSTI, DTI and LTI). https://www.imf.org/-/media/files/publications/selected-issues-papers/2023/english/sipea2023060.pdf"@en ,
+                                          "Surat Edaran OJK No. 19/SEOJK.06/2025 tentang Penyelenggaraan LPBBTI (turunan POJK No. 40 Tahun 2024): penerima dana minimal 18 tahun atau telah menikah; rasio utang terhadap penghasilan paling tinggi 40% pada 2025 dan 30% mulai 2026 (as reported by Bisnis.com, https://finansial.bisnis.com/read/20260112/563/1943510/tahun-ini-batas-maksimal-kredit-pinjol-diperketat-jadi-30-dari-gaji; verify against the official text)."@en ;
+                             :valueRange "Observed range: 0 to no fixed maximum. Regulatory/literature threshold: OJK caps on debt/payments relative to income: online lending (LPBBTI) 40% in 2025 and 30% from 2026 (SEOJK 19/2025); BNPL 40% in 2027-2028 and 30% from 2029 (PADK 2/2026); bank mortgage practice commonly 30-40% (Bisnis, 2025). Note: No published range for this derived ratio: compute annuity/income from your data. Income and annuity periods are not stated in the dictionary, so align periods before comparing with the OJK caps."@en ;
+                             rdfs:comment "Represents the ratio of installment payments to income when calculated as hasAnnuityAmount / hasIncomeAmount. OJK thresholds are reference comparisons for the applicable lending contexts, not general requirements for all consumer loans. Any threshold must follow the applicable period and regulation."@en ;
+                             skos:definition "Ratio of the loan's periodic installment (annuity) to the applicant's income. In IMF/ESRB/BIS terminology an installment-to-income measure is a debt-service-to-income (DSTI) ratio, whereas a DTI ratio uses outstanding debt balances. The Home Credit dictionary does not state the period of income or annuity, so comparison with OJK ratio caps (stated against income) needs a consistent period."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLandAreaAvg
+:hasLandAreaAvg rdf:type owl:DatatypeProperty ;
+                rdfs:domain :PropertyInformation ;
+                rdfs:range xsd:float ;
+                dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column LANDAREA_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                skos:definition "Normalized (0 to 1) average of the land area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLandAreaMedi
+:hasLandAreaMedi rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :PropertyInformation ;
+                 rdfs:range xsd:float ;
+                 dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column LANDAREA_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                 :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                 :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                 skos:definition "Normalized (0 to 1) median of the land area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLandAreaMode
+:hasLandAreaMode rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :PropertyInformation ;
+                 rdfs:range xsd:float ;
+                 dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column LANDAREA_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                 :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                 :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                 skos:definition "Normalized (0 to 1) mode (most frequent value) of the land area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLastPhoneChangeDays
+:hasLastPhoneChangeDays rdf:type owl:DatatypeProperty ;
+                        rdfs:domain :ContactInformation ;
+                        rdfs:range xsd:float ;
+                        dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column DAYS_LAST_PHONE_CHANGE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                        :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                     "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                        :valueRange "Observed range: -4292 to 0. Note: Negative days; at most about 11.8 years; 1 real row is empty."@en ;
+                        skos:definition "How many days before the application the applicant last changed their phone, stored as a negative number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLegalAge
+:hasLegalAge rdf:type owl:DatatypeProperty ;
+             rdfs:domain :Applicant ;
+             rdfs:range xsd:boolean ;
+             dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, columns DAYS_BIRTH, NAME_FAMILY_STATUS. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ,
+                            "Kitab Undang-Undang Hukum Perdata (KUHPerdata / Burgerlijk Wetboek), Pasal 330 (belum dewasa: belum genap 21 tahun dan tidak kawin sebelumnya)."@en ,
+                            "Peraturan Anggota Dewan Komisioner OJK No. 2 Tahun 2026 tentang Penyelenggaraan Beli Sekarang Bayar Nanti (BNPL) bagi Perusahaan Pembiayaan dan Perusahaan Pembiayaan Syariah: calon debitur minimal 18 tahun atau telah menikah, penghasilan bruto minimal Rp3.000.000 per bulan; berlaku paling lambat 1 Juli 2026."@en ,
+                            "Surat Edaran OJK No. 19/SEOJK.06/2025 tentang Penyelenggaraan LPBBTI (turunan POJK No. 40 Tahun 2024): penerima dana minimal 18 tahun atau telah menikah; rasio utang terhadap penghasilan paling tinggi 40% pada 2025 dan 30% mulai 2026 (as reported by Bisnis.com, https://finansial.bisnis.com/read/20260112/563/1943510/tahun-ini-batas-maksimal-kredit-pinjol-diperketat-jadi-30-dari-gaji; verify against the official text)."@en ,
+                            "Undang-Undang No. 1 Tahun 1974 tentang Perkawinan, Pasal 47 ayat (1) dan Pasal 50 ayat (1) (anak di bawah 18 tahun atau belum kawin berada di bawah kekuasaan orang tua/wali); Undang-Undang No. 16 Tahun 2019 (mengubah Pasal 7 ayat (1): batas usia perkawinan 19 tahun)."@en ;
+             :rangeSource "Kitab Undang-Undang Hukum Perdata (KUHPerdata / Burgerlijk Wetboek), Pasal 330 (belum dewasa: belum genap 21 tahun dan tidak kawin sebelumnya)."@en ,
+                          "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ,
+                          "Peraturan Anggota Dewan Komisioner OJK No. 2 Tahun 2026 tentang Penyelenggaraan Beli Sekarang Bayar Nanti (BNPL) bagi Perusahaan Pembiayaan dan Perusahaan Pembiayaan Syariah: calon debitur minimal 18 tahun atau telah menikah, penghasilan bruto minimal Rp3.000.000 per bulan; berlaku paling lambat 1 Juli 2026."@en ,
+                          "Surat Edaran OJK No. 19/SEOJK.06/2025 tentang Penyelenggaraan LPBBTI (turunan POJK No. 40 Tahun 2024): penerima dana minimal 18 tahun atau telah menikah; rasio utang terhadap penghasilan paling tinggi 40% pada 2025 dan 30% mulai 2026 (as reported by Bisnis.com, https://finansial.bisnis.com/read/20260112/563/1943510/tahun-ini-batas-maksimal-kredit-pinjol-diperketat-jadi-30-dari-gaji; verify against the official text)."@en ,
+                          "Undang-Undang No. 1 Tahun 1974 tentang Perkawinan, Pasal 47 ayat (1) dan Pasal 50 ayat (1) (anak di bawah 18 tahun atau belum kawin berada di bawah kekuasaan orang tua/wali); Undang-Undang No. 16 Tahun 2019 (mengubah Pasal 7 ayat (1): batas usia perkawinan 19 tahun)."@en ;
+             :valueRange "Allowed values: true / false. Regulatory/literature threshold: true if age >= 21 (KUHPerdata Art. 330) or >= 18 (UU 1/1974 Art. 47 and 50; OJK PADK 2/2026; SEOJK 19/2025) or married; marriage minimum age is 19 (UU 16/2019 Art. 7). Note: With the real age range (min about 20.5 years) an 18-year threshold is always true."@en ;
+             rdfs:comment "True if the applicant meets the applicable age threshold or is married. The threshold can be set to 21 years under KUHPerdata Article 330 or 18 years in the applicable context under the Marriage Law and OJK PADK 2/2026. The married exception is also considered under KUHPerdata Article 330."@en ;
+             skos:definition "Derived indicator that the applicant has reached the age required to enter a credit agreement, or is married. KUHPerdata Art. 330 sets 21 years (or earlier marriage) for legal adulthood; UU 1/1974 Art. 47 and 50 refer to 18 years; OJK PADK 2/2026 and SEOJK 19/2025 require at least 18 years or married for BNPL and online lending."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLivingApartmentsAvg
+:hasLivingApartmentsAvg rdf:type owl:DatatypeProperty ;
+                        rdfs:domain :PropertyInformation ;
+                        rdfs:range xsd:float ;
+                        dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column LIVINGAPARTMENTS_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                        :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                        :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                        skos:definition "Normalized (0 to 1) average of the living apartment size in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLivingApartmentsMedi
+:hasLivingApartmentsMedi rdf:type owl:DatatypeProperty ;
+                         rdfs:domain :PropertyInformation ;
+                         rdfs:range xsd:float ;
+                         dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column LIVINGAPARTMENTS_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                         :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                         :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                         skos:definition "Normalized (0 to 1) median of the living apartment size in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLivingApartmentsMode
+:hasLivingApartmentsMode rdf:type owl:DatatypeProperty ;
+                         rdfs:domain :PropertyInformation ;
+                         rdfs:range xsd:float ;
+                         dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column LIVINGAPARTMENTS_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                         :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                         :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                         skos:definition "Normalized (0 to 1) mode (most frequent value) of the living apartment size in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLivingAreaAvg
+:hasLivingAreaAvg rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column LIVINGAREA_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                  skos:definition "Normalized (0 to 1) average of the living area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLivingAreaMedi
+:hasLivingAreaMedi rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :PropertyInformation ;
+                   rdfs:range xsd:float ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column LIVINGAREA_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                   skos:definition "Normalized (0 to 1) median of the living area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLivingAreaMode
+:hasLivingAreaMode rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :PropertyInformation ;
+                   rdfs:range xsd:float ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column LIVINGAREA_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                   skos:definition "Normalized (0 to 1) mode (most frequent value) of the living area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLivingWorkCityDifference
+:hasLivingWorkCityDifference rdf:type owl:DatatypeProperty ;
+                             rdfs:domain :ResidenceInformation ;
+                             rdfs:range xsd:integer ;
+                             dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column LIVE_CITY_NOT_WORK_CITY. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                             :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                             :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1 (1 = different)."@en ;
+                             rdfs:comment "Indicates whether the applicant living city differs from the work city. A value of 1 means different, while 0 means the same."@en ;
+                             skos:definition "Flag (1 = different, 0 = same) showing whether the applicant's contact address city differs from the work address city."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLivingWorkRegionDifference
+:hasLivingWorkRegionDifference rdf:type owl:DatatypeProperty ;
+                               rdfs:domain :ResidenceInformation ;
+                               rdfs:range xsd:integer ;
+                               dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column LIVE_REGION_NOT_WORK_REGION. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                               :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                               :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1 (1 = different)."@en ;
+                               skos:definition "Flag (1 = different, 0 = same) showing whether the applicant's contact address region differs from the work address region."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasLoanType
+:hasLoanType rdf:type owl:DatatypeProperty ;
+             rdfs:domain <https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> ;
+             rdfs:range xsd:string ;
+             dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column NAME_CONTRACT_TYPE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+             :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+             :valueRange "Allowed values: Cash loans, Revolving loans."@en ;
+             skos:definition "Identifies whether the loan is a cash loan or a revolving loan."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasNonLivingApartmentsAvg
+:hasNonLivingApartmentsAvg rdf:type owl:DatatypeProperty ;
+                           rdfs:domain :PropertyInformation ;
+                           rdfs:range xsd:float ;
+                           dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column NONLIVINGAPARTMENTS_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                           :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                           :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                           skos:definition "Normalized (0 to 1) average of the non-living apartment size in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasNonLivingApartmentsMedi
+:hasNonLivingApartmentsMedi rdf:type owl:DatatypeProperty ;
+                            rdfs:domain :PropertyInformation ;
+                            rdfs:range xsd:float ;
+                            dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column NONLIVINGAPARTMENTS_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                            :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                            :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                            skos:definition "Normalized (0 to 1) median of the non-living apartment size in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasNonLivingApartmentsMode
+:hasNonLivingApartmentsMode rdf:type owl:DatatypeProperty ;
+                            rdfs:domain :PropertyInformation ;
+                            rdfs:range xsd:float ;
+                            dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column NONLIVINGAPARTMENTS_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                            :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                            :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                            skos:definition "Normalized (0 to 1) mode (most frequent value) of the non-living apartment size in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasNonLivingAreaAvg
+:hasNonLivingAreaAvg rdf:type owl:DatatypeProperty ;
+                     rdfs:domain :PropertyInformation ;
+                     rdfs:range xsd:float ;
+                     dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column NONLIVINGAREA_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                     :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                     :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                     skos:definition "Normalized (0 to 1) average of the non-living area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasNonLivingAreaMedi
+:hasNonLivingAreaMedi rdf:type owl:DatatypeProperty ;
+                      rdfs:domain :PropertyInformation ;
+                      rdfs:range xsd:float ;
+                      dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column NONLIVINGAREA_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                      :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                      :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                      skos:definition "Normalized (0 to 1) median of the non-living area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasNonLivingAreaMode
+:hasNonLivingAreaMode rdf:type owl:DatatypeProperty ;
+                      rdfs:domain :PropertyInformation ;
+                      rdfs:range xsd:float ;
+                      dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column NONLIVINGAREA_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                      :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                      :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                      skos:definition "Normalized (0 to 1) mode (most frequent value) of the non-living area in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasNumberOfChildren
+:hasNumberOfChildren rdf:type owl:DatatypeProperty ;
+                     rdfs:domain :Applicant ;
+                     rdfs:range xsd:integer ;
+                     dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column CNT_CHILDREN. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                     :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                     :valueRange "Observed range: 0 to 19."@en ;
+                     skos:definition "Number of children the applicant has."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasNumberOfFamilyMembers
+:hasNumberOfFamilyMembers rdf:type owl:DatatypeProperty ;
+                          rdfs:domain :Applicant ;
+                          rdfs:range xsd:float ;
+                          dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column CNT_FAM_MEMBERS. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                          :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                          :valueRange "Observed range: 1 to 20. Note: Integer-valued; at least 1."@en ;
+                          rdfs:comment "The number of family members. Values are expected to be greater than or equal to 1, based on the dataset structure."@en ;
+                          skos:definition "Number of family members of the applicant."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasOccupationType
+:hasOccupationType rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :Applicant ;
+                   rdfs:range xsd:string ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column OCCUPATION_TYPE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                   :valueRange "Allowed values: Laborers; Sales staff; Core staff; Managers; Drivers; High skill tech staff; Accountants; Medicine staff; Security staff; Cooking staff; Cleaning staff; Private service staff; Low-skill Laborers; Waiters/barmen staff; Secretaries; Realty agents; HR staff; IT staff (18 classes). Note: About 96,391 real rows are empty."@en ;
+                   skos:definition "The kind of occupation the applicant has."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasOrganizationType
+:hasOrganizationType rdf:type owl:DatatypeProperty ;
+                     rdfs:domain :Applicant ;
+                     rdfs:range xsd:string ;
+                     dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column ORGANIZATION_TYPE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                     :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                     :valueRange "Allowed values: Category string of 3 to 22 characters (e.g. 'Business Entity Type 3', 'Self-employed', 'XNA')."@en ;
+                     skos:definition "Type of organization where the applicant works."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasRealtyOwnershipStatus
+:hasRealtyOwnershipStatus rdf:type owl:DatatypeProperty ;
+                          rdfs:domain :Applicant ;
+                          rdfs:range xsd:string ;
+                          dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column FLAG_OWN_REALTY. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                          :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                          :valueRange "Allowed values: Y, N."@en ;
+                          skos:definition "Flag showing whether the applicant owns a house or flat (Y/N)."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasRegionPopulationRelative
+:hasRegionPopulationRelative rdf:type owl:DatatypeProperty ;
+                             rdfs:domain :ResidenceInformation ;
+                             rdfs:range xsd:float ;
+                             dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column REGION_POPULATION_RELATIVE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                             :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                             :valueRange "Observed range: ~0 to ~0.07. Note: Normalized relative population."@en ;
+                             skos:definition "Normalized population of the region where the applicant lives; a higher value means a more populated region."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasRegionRating
+:hasRegionRating rdf:type owl:DatatypeProperty ;
+                 rdfs:domain :ResidenceInformation ;
+                 rdfs:range xsd:integer ;
+                 dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column REGION_RATING_CLIENT. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                 :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                 :valueRange "Observed range: 1 to 3. Allowed values: 1, 2, 3 (1 = best)."@en ;
+                 rdfs:comment "Home Credit rating of the applicant residence area on a scale of 1 to 3, where 1 is the best rating and 3 is the worst."@en ;
+                 skos:definition "Home Credit's rating (1 to 3) of the region where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasRegionRatingCity
+:hasRegionRatingCity rdf:type owl:DatatypeProperty ;
+                     rdfs:domain :ResidenceInformation ;
+                     rdfs:range xsd:integer ;
+                     dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column REGION_RATING_CLIENT_W_CITY. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                     :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                     :valueRange "Observed range: 1 to 3. Allowed values: 1, 2, 3 (1 = best)."@en ;
+                     rdfs:comment "Home Credit rating of the applicant residence area considering city factors, on a scale of 1 to 3."@en ;
+                     skos:definition "Home Credit's rating (1 to 3) of the region where the applicant lives, taking the city into account."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasRegistrationDaysBeforeApplication
+:hasRegistrationDaysBeforeApplication rdf:type owl:DatatypeProperty ;
+                                      rdfs:domain :Applicant ;
+                                      rdfs:range xsd:float ;
+                                      dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column DAYS_REGISTRATION. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                                      :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                                      :valueRange "Observed range: -24672 to 0. Note: Negative days; at most about 67.5 years."@en ;
+                                      skos:definition "How many days before the application the applicant last changed their registration, stored as a negative number."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasRegistrationLivingCityDifference
+:hasRegistrationLivingCityDifference rdf:type owl:DatatypeProperty ;
+                                     rdfs:domain :ResidenceInformation ;
+                                     rdfs:range xsd:integer ;
+                                     dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column REG_CITY_NOT_LIVE_CITY. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                                     :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                                     :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1 (1 = different)."@en ;
+                                     skos:definition "Flag (1 = different, 0 = same) showing whether the applicant's permanent address city differs from the contact address city."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasRegistrationLivingRegionDifference
+:hasRegistrationLivingRegionDifference rdf:type owl:DatatypeProperty ;
+                                       rdfs:domain :ResidenceInformation ;
+                                       rdfs:range xsd:integer ;
+                                       dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column REG_REGION_NOT_LIVE_REGION. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                                       :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                                       :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1 (1 = different)."@en ;
+                                       skos:definition "Flag (1 = different, 0 = same) showing whether the applicant's permanent address region differs from the contact address region."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasRegistrationWorkCityDifference
+:hasRegistrationWorkCityDifference rdf:type owl:DatatypeProperty ;
+                                   rdfs:domain :ResidenceInformation ;
+                                   rdfs:range xsd:integer ;
+                                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column REG_CITY_NOT_WORK_CITY. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                                   :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1 (1 = different)."@en ;
+                                   skos:definition "Flag (1 = different, 0 = same) showing whether the applicant's permanent address city differs from the work address city."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasRegistrationWorkRegionDifference
+:hasRegistrationWorkRegionDifference rdf:type owl:DatatypeProperty ;
+                                     rdfs:domain :ResidenceInformation ;
+                                     rdfs:range xsd:integer ;
+                                     dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column REG_REGION_NOT_WORK_REGION. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                                     :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                                     :valueRange "Observed range: 0 to 1. Allowed values: 0 or 1 (1 = different)."@en ;
+                                     skos:definition "Flag (1 = different, 0 = same) showing whether the applicant's permanent address region differs from the work address region."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasSocialCircleDefault30
+:hasSocialCircleDefault30 rdf:type owl:DatatypeProperty ;
+                          rdfs:domain :SocialSurroundings ;
+                          rdfs:range xsd:float ;
+                          dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column DEF_30_CNT_SOCIAL_CIRCLE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                          :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                       "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                          :valueRange "Observed range: 0 to 34. Note: Non-negative integer; cannot exceed the observation count."@en ;
+                          rdfs:comment "The number of people in the applicant social circle with a history of credit payment delays exceeding 30 days."@en ;
+                          skos:definition "Number of people in the applicant's social surroundings who defaulted on a 30 days-past-due basis."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasSocialCircleDefault60
+:hasSocialCircleDefault60 rdf:type owl:DatatypeProperty ;
+                          rdfs:domain :SocialSurroundings ;
+                          rdfs:range xsd:float ;
+                          dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column DEF_60_CNT_SOCIAL_CIRCLE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                          :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                       "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                          :valueRange "Observed range: 0 to 24. Note: Non-negative integer; cannot exceed the observation count."@en ;
+                          rdfs:comment "The number of people in the applicant social circle with a history of credit payment delays exceeding 60 days."@en ;
+                          skos:definition "Number of people in the applicant's social surroundings who defaulted on a 60 days-past-due basis."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasSocialCircleObservation30
+:hasSocialCircleObservation30 rdf:type owl:DatatypeProperty ;
+                              rdfs:domain :SocialSurroundings ;
+                              rdfs:range xsd:float ;
+                              dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column OBS_30_CNT_SOCIAL_CIRCLE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                              :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                           "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                              :valueRange "Observed range: 0 to 348. Note: Non-negative integer; about 1,021 real rows are empty."@en ;
+                              rdfs:comment "The number of people in the applicant social circle whose credit payment history is known, using a 30-day delay threshold."@en ;
+                              skos:definition "Number of observations of the applicant's social surroundings with an observable 30 days-past-due status."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasSocialCircleObservation60
+:hasSocialCircleObservation60 rdf:type owl:DatatypeProperty ;
+                              rdfs:domain :SocialSurroundings ;
+                              rdfs:range xsd:float ;
+                              dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column OBS_60_CNT_SOCIAL_CIRCLE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                              :rangeSource "Berry, J., Home Credit Default notebook: AMT_INCOME_TOTAL maximum 117,000,000; AMT_REQ_CREDIT_BUREAU_QRT outlier 261; missing-value counts per column. https://jareddberry.github.io/files/hcd_notebook.html"@en ,
+                                           "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                              :valueRange "Observed range: 0 to 344. Note: Non-negative integer; about 1,021 real rows are empty."@en ;
+                              rdfs:comment "The number of people in the applicant social circle whose credit payment history is known, using a 60-day delay threshold."@en ;
+                              skos:definition "Number of observations of the applicant's social surroundings with an observable 60 days-past-due status."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasTotalAreaMode
+:hasTotalAreaMode rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column TOTALAREA_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Note: Normalized value."@en ;
+                  skos:definition "Normalized (0 to 1) total area of the building where the applicant lives (mode)."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasUnemployed
+:hasUnemployed rdf:type owl:DatatypeProperty ;
+               rdfs:domain :Applicant ;
+               rdfs:range xsd:boolean ;
+               dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, columns DAYS_EMPLOYED, NAME_INCOME_TYPE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+               :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ,
+                            "Randlow, 'Kaggle: Credit risk (Exploratory Data Analysis)', describe() of DAYS_EMPLOYED: min -17912, max 365243. https://randlow.github.io/posts/machine-learning/kaggle-home-loan-credit-risk-eda"@en ;
+               :valueRange "Allowed values: true / false. Note: true exactly when employment duration = 365243; the placeholder is not documented by Home Credit."@en ;
+               rdfs:comment "True if hasEmploymentDurationInDays equals the sentinel value 365243. This is a dataset-based indicator of unemployment."@en ;
+               skos:definition "Dataset-derived flag set when hasEmploymentDurationInDays equals the placeholder 365243. The official dictionary does not document this value, so its reading as 'unemployed' is a modelling assumption (it can also cover other non-working income types such as pensioners)."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasWallsMaterialMode
+:hasWallsMaterialMode rdf:type owl:DatatypeProperty ;
+                      rdfs:domain :PropertyInformation ;
+                      rdfs:range xsd:string ;
+                      dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column WALLSMATERIAL_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                      :rangeSource "Category set of the real application_train.csv (Home Credit Group, Kaggle); number of classes confirmed in https://huggingface.co/datasets/jlh/home-credit; confirm the exact labels with value_counts() on your own download."@en ;
+                      :valueRange "Allowed values: Stone, brick; Block; Panel; Mixed; Monolithic; Wooden; Others (7 classes)."@en ;
+                      skos:definition "Wall material of the building where the applicant lives (for example panel, stone/brick, wooden)."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasYearsBeginExpluatationAvg
+:hasYearsBeginExpluatationAvg rdf:type owl:DatatypeProperty ;
+                              rdfs:domain :PropertyInformation ;
+                              rdfs:range xsd:float ;
+                              dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column YEARS_BEGINEXPLUATATION_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                              :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                              :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                              skos:definition "Normalized (0 to 1) average of the number of years since the building began operation (spelling follows the dataset) in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasYearsBeginExpluatationMedi
+:hasYearsBeginExpluatationMedi rdf:type owl:DatatypeProperty ;
+                               rdfs:domain :PropertyInformation ;
+                               rdfs:range xsd:float ;
+                               dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column YEARS_BEGINEXPLUATATION_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                               :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                               :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                               skos:definition "Normalized (0 to 1) median of the number of years since the building began operation (spelling follows the dataset) in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasYearsBeginExpluatationMode
+:hasYearsBeginExpluatationMode rdf:type owl:DatatypeProperty ;
+                               rdfs:domain :PropertyInformation ;
+                               rdfs:range xsd:float ;
+                               dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column YEARS_BEGINEXPLUATATION_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                               :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                               :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                               skos:definition "Normalized (0 to 1) mode (most frequent value) of the number of years since the building began operation (spelling follows the dataset) in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasYearsBuildAvg
+:hasYearsBuildAvg rdf:type owl:DatatypeProperty ;
+                  rdfs:domain :PropertyInformation ;
+                  rdfs:range xsd:float ;
+                  dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column YEARS_BUILD_AVG. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                  :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                  :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                  skos:definition "Normalized (0 to 1) average of the building age or construction-year measure in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasYearsBuildMedi
+:hasYearsBuildMedi rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :PropertyInformation ;
+                   rdfs:range xsd:float ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column YEARS_BUILD_MEDI. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                   skos:definition "Normalized (0 to 1) median of the building age or construction-year measure in the building where the applicant lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/hasYearsBuildMode
+:hasYearsBuildMode rdf:type owl:DatatypeProperty ;
+                   rdfs:domain :PropertyInformation ;
+                   rdfs:range xsd:float ;
+                   dcterms:source "Home Credit Group, HomeCredit_columns_description.csv (competition 'Home Credit Default Risk', Kaggle), application_train.csv, column YEARS_BUILD_MODE. https://www.kaggle.com/competitions/home-credit-default-risk/data"@en ;
+                   :rangeSource "Observed range in the real application_train.csv (Home Credit Group, Kaggle 'Home Credit Default Risk'); min-max as displayed by the dataset viewer of that file, https://huggingface.co/datasets/jlh/home-credit (viewer rounds large values). Confirm exact values with application_train.describe() on your own download."@en ;
+                   :valueRange "Observed range: 0 to 1. Note: Normalized value; the dataset does not use real units."@en ;
+                   skos:definition "Normalized (0 to 1) mode (most frequent value) of the building age or construction-year measure in the building where the applicant lives."@en .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/Applicant
+:Applicant rdf:type owl:Class ;
+           rdfs:comment "The person who applies for a loan and provides personal, demographic, financial, employment, and family information."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/ContactInformation
+:ContactInformation rdf:type owl:Class ;
+                    rdfs:comment "Information about the contact methods provided by the applicant and whether those contacts are available or reachable."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/CreditBureauHistory
+:CreditBureauHistory rdf:type owl:Class ;
+                     rdfs:comment "Information about the number of enquiries made to a credit bureau about the applicant during different periods before the loan application."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/ExternalAssessment
+:ExternalAssessment rdf:type owl:Class ;
+                    rdfs:comment "Scores obtained from external data sources and used as external assessment information for the client."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/PropertyInformation
+:PropertyInformation rdf:type owl:Class ;
+                     rdfs:comment "Information about the building or property where the client lives."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/ResidenceInformation
+:ResidenceInformation rdf:type owl:Class ;
+                      rdfs:comment "Information about the applicant's residence, region, population, and the relationship between permanent, contact, and work locations."@en .
+
+
+###  http://www.semanticweb.org/najma/ontologies/homecredit/SocialSurroundings
+:SocialSurroundings rdf:type owl:Class ;
+                    rdfs:comment "Information about observations of the applicant's social surroundings and the number of observed people with payment difficulties."@en .
+
+
+###  https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication
+<https://spec.edmcouncil.org/fibo/ontology/LOAN/LoansGeneral/LoanApplications/LoanApplication> rdf:type owl:Class ;
+                                                                                               rdfs:comment "request by a potential borrower to a potential lender to borrow money containing information used to decide whether to grant the loan"@en .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
